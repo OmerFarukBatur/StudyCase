@@ -109,6 +109,7 @@ UpdatedBy, UpdatedAt
 Onay ve ret işlemleri ayrı bir Approvals tablosunda saklanır.
 
 🗂 Proje Yapısı
+
 StudyCase/
 ├── Core/
 │   ├── Entities/           # Domain modelleri
