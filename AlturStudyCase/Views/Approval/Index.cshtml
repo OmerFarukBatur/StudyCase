@@ -1,0 +1,219 @@
+﻿@model Core.Helpers.PaginatedList<Core.DTOs.ApprovalDtos.LeaveRequestApprovalDto>
+@using Core.Enums
+@{
+    ViewData["Title"] = "Bekleyen İzin Talepleri";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var employees = ViewBag.Employees as IEnumerable<dynamic>;
+    var leaveTypes = ViewBag.LeaveTypes as IEnumerable<dynamic>;
+    var filters = ViewBag.Filters as dynamic;
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card" style="min-height: 800px;">
+                <div class="card-body">
+                    <div class="row page-titles mx-0" style="background-color:white;">
+                        <div class="col p-md-0 text-center">
+                            <h4>Bekleyen İzin Talepleri</h4>
+                        </div>
+                    </div>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="row mb-3 mt-4">
+                        <div class="col-12">
+                            <form method="get" asp-controller="Approval" asp-action="Index" class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">Başlangıç Tarihi</label>
+                                    <input type="date" name="startDate" class="form-control"
+                                           value="@(filters?.startDate?.ToString("yyyy-MM-dd"))">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Bitiş Tarihi</label>
+                                    <input type="date" name="endDate" class="form-control"
+                                           value="@(filters?.endDate?.ToString("yyyy-MM-dd"))">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">Çalışan</label>
+                                    <select name="employeeId" class="form-control">
+                                        <option value="">Tüm Çalışanlar</option>
+                                        @if (employees != null)
+                                        {
+                                            foreach (var emp in employees)
+                                            {
+                                                <option value="@emp.Id" selected="@(filters?.employeeId != null && filters.employeeId == emp.Id)">
+                                                    @emp.Name
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">İzin Türü</label>
+                                    <select name="leaveTypeId" class="form-control">
+                                        <option value="">Tüm İzin Türleri</option>
+                                        @if (leaveTypes != null)
+                                        {
+                                            foreach (var lt in leaveTypes)
+                                            {
+                                                <option value="@lt.Id" selected="@(filters?.leaveTypeId != null && filters.leaveTypeId == lt.Id)">
+                                                    @lt.Name
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-filter"></i> Filtrele
+                                    </button>
+                                    <a href="@Url.Action("Index", "Approval")" class="btn btn-secondary">
+                                        <i class="fa fa-times"></i> Temizle
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="form-validation">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Çalışan</th>
+                                    <th>Tür</th>
+                                    <th>Başlangıç</th>
+                                    <th>Bitiş</th>
+                                    <th>Gün</th>
+                                    <th>Açıklama</th>
+                                    <th>Talep Tarihi</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div>@item.EmployeeName</div>
+                                                <small class="text-muted">@item.EmployeeEmail</small>
+                                            </td>
+                                            <td>@item.LeaveType</td>
+                                            <td>@item.StartDate.ToShortDateString()</td>
+                                            <td>@item.EndDate.ToShortDateString()</td>
+                                            <td>@item.TotalDays gün</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Reason))
+                                                {
+                                                    <span>@item.Reason</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">—</span>
+                                                }
+                                            </td>
+                                            <td>@item.CreatedAt.ToShortDateString()</td>
+                                            <td>
+                                                <a asp-controller="Approval" asp-action="Edit" asp-route-id="@item.Id"
+                                                   class="btn btn-sm btn-warning">
+                                                    <i class="fa fa-edit"></i> Düzenle
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted">
+                                            Bekleyen izin talebi bulunmuyor.
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (Model != null && Model.TotalPages > 1)
+                    {
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                @if (Model.HasPreviousPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           asp-controller="Approval" asp-action="Index"
+                                           asp-route-pageIndex="@(Model.PageIndex - 1)"
+                                           asp-route-startDate="@(filters?.startDate?.ToString("yyyy-MM-dd"))"
+                                           asp-route-endDate="@(filters?.endDate?.ToString("yyyy-MM-dd"))"
+                                           asp-route-employeeId="@(filters?.employeeId)"
+                                           asp-route-leaveTypeId="@(filters?.leaveTypeId)">
+                                            Önceki
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item disabled"><span class="page-link">Önceki</span></li>
+                                }
+
+                                @for (int i = 1; i <= Model.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                                        <a class="page-link"
+                                           asp-controller="Approval" asp-action="Index"
+                                           asp-route-pageIndex="@i"
+                                           asp-route-startDate="@(filters?.startDate?.ToString("yyyy-MM-dd"))"
+                                           asp-route-endDate="@(filters?.endDate?.ToString("yyyy-MM-dd"))"
+                                           asp-route-employeeId="@(filters?.employeeId)"
+                                           asp-route-leaveTypeId="@(filters?.leaveTypeId)">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (Model.HasNextPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           asp-controller="Approval" asp-action="Index"
+                                           asp-route-pageIndex="@(Model.PageIndex + 1)"
+                                           asp-route-startDate="@(filters?.startDate?.ToString("yyyy-MM-dd"))"
+                                           asp-route-endDate="@(filters?.endDate?.ToString("yyyy-MM-dd"))"
+                                           asp-route-employeeId="@(filters?.employeeId)"
+                                           asp-route-leaveTypeId="@(filters?.leaveTypeId)">
+                                            Sonraki
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item disabled"><span class="page-link">Sonraki</span></li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,256 @@
+﻿@using Core.DTOs.AdminDtos
+@model DashboardSummaryViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid mt-3" style="min-height: 800px;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Bu Ay Onaylanan İzinler
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.ApprovedLeavesThisMonth
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-calendar-check me-1"></i>
+                                    Bu ayki onaylanan izinler
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    En Çok Kullanılan İzin Türü
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.MostUsedLeaveType.TypeName
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    Toplam @Model.MostUsedLeaveType.UsageCount kullanım
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-star fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Bekleyen Talepler
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.PendingRequestsCount
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Onay bekleyen talepler
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clock fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Toplam Çalışan
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.TotalEmployees
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-users me-1"></i>
+                                    Aktif çalışan sayısı
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-info"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-secondary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                    Bu Hafta İzinler
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.ThisWeekLeaves
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-calendar-week me-1"></i>
+                                    Bu hafta başlayan izinler
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar-week fa-2x text-secondary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                    Reddedilen İzinler
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.RejectedLeavesThisMonth
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-times-circle me-1"></i>
+                                    Bu ay reddedilenler
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-ban fa-2x text-danger"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                    Ortalama İzin Süresi
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.AverageLeaveDays gün
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-chart-line me-1"></i>
+                                    Onaylanan izinler ortalaması
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-line fa-2x text-dark"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Yaklaşan İzinler
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    @Model.UpcomingLeaves
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-calendar-alt me-1"></i>
+                                    Önümüzdeki 7 gün
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar-alt fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Yıllık İzin Kullanımı
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    %@Model.AnnualLeaveUsageRate
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    <i class="fas fa-percentage me-1"></i>
+                                    Bu yılki kullanım oranı
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-pie fa-2x text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>    
+</div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        transition: transform 0.2s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+    .border-left-success {
+        border-left: 4px solid #28a745 !important;
+    }
+
+    .border-left-primary {
+        border-left: 4px solid #007bff !important;
+    }
+
+    .border-left-warning {
+        border-left: 4px solid #ffc107 !important;
+    }
+
+    .text-xs {
+        font-size: 0.75rem;
+    }
+</style>

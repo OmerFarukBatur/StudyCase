@@ -1,0 +1,103 @@
+﻿@using Core.DTOs.AdminDtos
+@using System.Globalization
+@model List<MonthlyLeaveSummaryDto>
+
+@{
+    ViewData["Title"] = "Aylık İzin Özeti";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    int selectedYear = ViewBag.SelectedYear ?? DateTime.Now.Year;
+    int selectedMonth = ViewBag.SelectedMonth ?? DateTime.Now.Month;
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card" style="min-height: 800px;">
+                <div class="card-body">
+                    <div class="row page-titles mx-0 bg-white">
+                        <div class="col p-md-0 text-center">
+                            <h4 class="mb-0">Aylık İzin Özeti</h4>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 mt-4">
+                        <div class="col-12">
+                            <form method="get" asp-action="MonthlySummary" class="form-inline">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-3">
+                                        <label for="year" class="form-label fw-bold">Yıl</label>
+                                        <select id="year" name="year" class="form-control">
+                                            @for (int y = DateTime.Now.Year - 5; y <= DateTime.Now.Year; y++)
+                                            {
+                                                var isSelected = y == selectedYear ? "selected" : "";
+                                                <option value="@y" selected="@isSelected">@y</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="month" class="form-label fw-bold">Ay</label>
+                                        <select id="month" name="month" class="form-control">
+                                            @for (int m = 1; m <= 12; m++)
+                                            {
+                                                var isSelected = m == selectedMonth ? "selected" : "";
+                                                var monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m);
+                                                <option value="@m" selected="@isSelected">@monthName</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-filter me-1"></i> Filtrele
+                                        </button>
+                                        <a asp-action="ExportCsv"
+                                           asp-route-year="@selectedYear"
+                                           asp-route-month="@selectedMonth"
+                                           class="btn btn-success ms-2">
+                                            <i class="fa fa-file-csv me-1"></i> CSV Aktar
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped align-middle">
+                                <thead class="table-light text-center">
+                                    <tr>
+                                        <th>Çalışan</th>
+                                        <th>Yıl</th>
+                                        <th>Ay</th>
+                                        <th>Toplam Onaylı Gün</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.EmployeeFullName</td>
+                                            <td class="text-center">@item.Year</td>
+                                            <td class="text-center">@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.Month)</td>
+                                            <td class="text-center fw-bold">@item.TotalApprovedDays</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center mt-4">
+                            Bu ay için onaylanmış izin bulunamadı.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

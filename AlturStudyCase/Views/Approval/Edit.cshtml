@@ -1,0 +1,121 @@
+﻿@model Core.DTOs.ApprovalDtos.ApprovalCreateDto
+@using Core.Enums
+@using Core.Helpers
+@{
+    ViewData["Title"] = "İzin Talebini Değerlendir";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card" style="min-height: 800px;">
+                <div class="card-body">
+                    <div class="row page-titles mx-0" style="background-color:white;">
+                        <div class="col p-md-0 text-center">
+                            <h4>İzin Talebini Değerlendir</h4>
+                        </div>
+                    </div>
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Error"]</div>
+                    }
+
+                    <div class="form-validation mt-4">
+                        <form asp-action="Edit" method="post">
+
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="LeaveRequestId" />
+                            <input type="hidden" asp-for="EmployeeId" />
+                            <input type="hidden" asp-for="EmployeeFullName" />
+                            <input type="hidden" asp-for="Title" />
+                            <input type="hidden" asp-for="StartDate" />
+                            <input type="hidden" asp-for="EndDate" />
+                            <input type="hidden" asp-for="LeaveType" />
+                            <input type="hidden" asp-for="LeaveTypeId" />
+                            <input type="hidden" asp-for="Reason" />
+                            <input type="hidden" asp-for="RowVersion" />        
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fa fa-user me-2"></i>Çalışan Bilgisi</h6>
+                                            <p class="mb-1"><strong>Ad Soyad:</strong> @Model.EmployeeFullName</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fa fa-calendar me-2"></i>İzin Detayları</h6>
+                                            <p class="mb-1"><strong>Başlangıç:</strong> @Model.StartDate.ToShortDateString()</p>
+                                            <p class="mb-1"><strong>Bitiş:</strong> @Model.EndDate.ToShortDateString()</p>
+                                            <p class="mb-0"><strong>Tür:</strong> @Model.LeaveType</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title"><i class="fa fa-info-circle me-2"></i>İzin Açıklaması</h6>
+                                            <p class="mb-2"><strong>Başlık:</strong> @Model.Title</p>
+                                            <p class="mb-0"><strong>Açıklama:</strong> @Model.Reason</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="form-group row mb-4">
+                                <label class="col-lg-4 col-form-label" asp-for="ApprovalActionId">
+                                    Karar <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-lg-8">
+                                    <select asp-for="ApprovalActionId" class="form-control" required>
+                                        @foreach (var action in Enum.GetValues(typeof(ApprovalAction)))
+                                        {
+                                            <option value="@((int)action)">
+                                                @(((ApprovalAction)action).GetDisplayName())
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="ApprovalActionId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
+                                <label class="col-lg-4 col-form-label" asp-for="Comments">
+                                    Açıklama
+                                    <span id="commentsRequired" class="text-danger" style="display: none;">*</span>
+                                </label>
+                                <div class="col-lg-8">
+                                    <textarea class="form-control" asp-for="Comments" rows="5"
+                                              placeholder="Kararınızla ilgili açıklama yazın..."></textarea>
+                                    <small class="form-text text-muted">
+                                        <span id="approveHint">Onay işleminde açıklama opsiyoneldir.</span>
+                                        <span id="rejectHint" style="display: none;" class="text-danger">Red işleminde açıklama zorunludur.</span>
+                                    </small>
+                                    <span asp-validation-for="Comments" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-lg-8 offset-lg-4">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        Kaydet
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

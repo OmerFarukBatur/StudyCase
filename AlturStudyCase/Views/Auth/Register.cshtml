@@ -1,0 +1,47 @@
+﻿@using Core.DTOs.UserDtos
+@model UserCreateDto
+@{
+    ViewData["Title"] = "Kayıt Ol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card-body pt-5">
+
+    <a class="text-center" href="index.html"> <h4>Kayıt Ol</h4></a>
+
+    <form class="mt-5 mb-5 login-input" asp-controller="Auth" asp-action="Register" method="post">
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+
+        <div class="form-group">
+            <input type="text" class="form-control" asp-for="@Model.FirstName" placeholder="Ad" required>
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" asp-for="@Model.LastName" placeholder="Soyad" required>
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" asp-for="@Model.Email" placeholder="Email" required>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" asp-for="@Model.Password" placeholder="Şifre" required>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" asp-for="@Model.PasswordConfirm" placeholder="Şifre Tekrar" required>
+            <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn login-form__btn submit w-100">Kayıt ol</button>
+    </form>
+    <p class="mt-5 login-form__footer">Hesabın varsa şimdi giriş yap <a asp-controller="Auth" asp-action="Login" class="text-primary">Giriş Yap </a></p>
+</div>

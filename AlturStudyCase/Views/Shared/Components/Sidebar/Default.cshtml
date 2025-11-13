@@ -1,0 +1,63 @@
+﻿@model SidebarViewModel
+<div class="nk-sidebar">
+    <div class="nk-nav-scroll">
+        <ul class="metismenu" id="menu">
+            
+            @if (Model.Role == "Manager")
+            {
+                <!-- Dashboard -->
+                <li>
+                    <a asp-controller="Admin" asp-action="Index" aria-expanded="false">
+                        <i class="icon-speedometer menu-icon"></i>
+                        <span class="nav-text">Panel</span>
+                    </a>
+                </li>
+                <!-- Kullanıcılar -->
+                <li>
+                    <a asp-controller="Admin" asp-action="Users" aria-expanded="false">
+                        <i class="icon-people menu-icon"></i>
+                        <span class="nav-text">Kullanıcılar</span>
+                    </a>
+                </li>
+                <!-- Kullanıcı Rolleri -->
+                <li>
+                    <a asp-controller="Admin" asp-action="Roles" aria-expanded="false">
+                        <i class="icon-lock menu-icon"></i>
+                        <span class="nav-text">Roller</span>
+                    </a>
+                </li>
+                <!-- Raporlar -->
+                <li>
+                    <a asp-controller="Admin" asp-action="MonthlySummary" aria-expanded="false">
+                        <i class="icon-chart menu-icon"></i>
+                        <span class="nav-text">Aylık İzin Özeti</span>
+                    </a>
+                </li>
+            }else
+            {
+                <!-- Dashboard -->
+                <li>
+                    <a asp-controller="Employee" asp-action="Index" aria-expanded="false">
+                        <i class="icon-speedometer menu-icon"></i>
+                        <span class="nav-text">Panel</span>
+                    </a>
+                </li>
+                <!-- İzin Sayfası -->
+                <li>
+                    <a asp-controller="LeaveRequest" asp-action="Index" aria-expanded="false">
+                        <i class="icon-list menu-icon"></i>
+                        <span class="nav-text">İzinler</span>
+                    </a>
+                </li>
+
+                <!-- Onay Bekleyen Talepler -->
+                <li>
+                    <a asp-controller="LeaveRequest" asp-action="ApprovalHistory" aria-expanded="false">
+                        <i class="icon-check menu-icon"></i>
+                        <span class="nav-text">Onaylanmış / Reddedilmiş</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

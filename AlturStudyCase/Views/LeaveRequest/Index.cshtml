@@ -1,0 +1,181 @@
+﻿@model Core.Helpers.PaginatedList<Core.DTOs.LeaveRequestDtos.LeaveRequestListDto>
+@using Core.Enums
+@using Core.Helpers
+@{
+    ViewData["Title"] = "İzin Taleplerim";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var selectedStatus = ViewBag.SelectedStatus as LeaveStatus?;
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card" style="min-height: 800px;">
+                <div class="card-body">
+                    <div class="row page-titles mx-0" style="background-color:white;">
+                        <div class="col p-md-0 text-center">
+                            <h4>İzin Taleplerim</h4>
+                        </div>
+                        <div class="col-auto p-md-0 text-end">
+                            <a href="@Url.Action("Create", "LeaveRequest")" class="btn btn-primary">
+                                <i class="fa fa-plus"></i> İzin Ekle
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 mt-4">
+                        <div class="col-md-3">
+                            <form method="get" asp-controller="LeaveRequest" asp-action="Index">
+                                <select name="filter" class="form-control" onchange="this.form.submit()">
+                                    <option value="">Tümü</option>
+                                    @foreach (var item in Enum.GetValues(typeof(LeaveStatus)))
+                                    {
+                                        var intVal = (int)item;
+                                        var displayName = ((LeaveStatus)item).GetDisplayName();
+                                        var isSelected = selectedStatus == (LeaveStatus)item;
+
+                                        if (isSelected)
+                                        {
+                                            <option value="@intVal" selected>@displayName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@intVal">@displayName</option>
+                                        }
+                                    }
+                                </select>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="form-validation">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Başlık</th>
+                                    <th>Tür</th>
+                                    <th>Başlangıç</th>
+                                    <th>Bitiş</th>
+                                    <th>Durum</th>
+                                    <th>Oluşturulma</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.Title</td>
+                                            <td>@item.LeaveType</td>
+                                            <td>@item.StartDate.ToShortDateString()</td>
+                                            <td>@item.EndDate.ToShortDateString()</td>
+                                            <td>
+                                                @switch ((LeaveStatus)item.LeaveStatusId)
+                                                {
+                                                    case LeaveStatus.Pending:
+                                                        <span class="badge bg-warning text-dark">Beklemede</span>
+                                                        break;
+                                                    case LeaveStatus.Approved:
+                                                        <span class="badge bg-success">Onaylandı</span>
+                                                        break;
+                                                    case LeaveStatus.Rejected:
+                                                        <span class="badge bg-danger">Reddedildi</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>@item.CreatedAt.ToShortDateString()</td>
+                                            <td>
+                                                @if (item.LeaveStatusId == (int)LeaveStatus.Pending)
+                                                {
+                                                    <a asp-controller="LeaveRequest" asp-action="Edit" asp-route-id="@item.Id"
+                                                       class="btn btn-sm btn-warning me-1">
+                                                        <i class="fa fa-edit"></i> Güncelle
+                                                    </a>
+
+                                                    <form asp-controller="LeaveRequest" asp-action="Delete" asp-route-id="@item.Id"
+                                                          method="post" style="display:inline;">
+                                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                                onclick="return confirm('Bu izni silmek istediğinize emin misiniz?');">
+                                                            <i class="fa fa-trash"></i> Sil
+                                                        </button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">—</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">Henüz izin talebiniz bulunmuyor.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (Model.TotalPages > 1)
+                    {
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                @if (Model.HasPreviousPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           asp-controller="LeaveRequest"
+                                           asp-action="Index"
+                                           asp-route-pageIndex="@(Model.PageIndex - 1)"
+                                           asp-route-filter="@((int?)selectedStatus)">
+                                            Önceki
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item disabled"><span class="page-link">Önceki</span></li>
+                                }
+
+                                @for (int i = 1; i <= Model.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                                        <a class="page-link"
+                                           asp-controller="LeaveRequest"
+                                           asp-action="Index"
+                                           asp-route-pageIndex="@i"
+                                           asp-route-filter="@((int?)selectedStatus)">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (Model.HasNextPage)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           asp-controller="LeaveRequest"
+                                           asp-action="Index"
+                                           asp-route-pageIndex="@(Model.PageIndex + 1)"
+                                           asp-route-filter="@((int?)selectedStatus)">
+                                            Sonraki
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item disabled"><span class="page-link">Sonraki</span></li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+﻿@model Core.DTOs.EmployeeDtos.EmployeeDashboardDto
+@{
+    ViewData["Title"] = "Panel";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card" style="height:1026px;">
+                <div class="card-body">
+                    <h4 class="card-title">İzin İstatistiklerim</h4>
+                    <p class="text-muted">Son 1 yıllık izin durumunuz</p>
+
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-6 col-sm-6">
+                            <div class="card text-white bg-primary">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h3 class="font-weight-bold">@Model.TotalLeaveRequests</h3>
+                                            <p class="mb-0">Toplam İzin Talebi</p>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fa fa-paper-plane fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-sm-6">
+                            <div class="card text-white bg-success">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h3 class="font-weight-bold">@Model.ApprovedLeaves</h3>
+                                            <p class="mb-0">Onaylanan İzinler</p>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fa fa-check-circle fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-sm-6">
+                            <div class="card text-white bg-danger">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h3 class="font-weight-bold">@Model.RejectedLeaves</h3>
+                                            <p class="mb-0">Reddedilen İzinler</p>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fa fa-times-circle fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-6 col-sm-6">
+                            <div class="card text-white bg-warning">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h3 class="font-weight-bold">@Model.PendingLeaves</h3>
+                                            <p class="mb-0">Bekleyen İzinler</p>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fa fa-clock fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-xl-6 col-lg-6 col-sm-12">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h3 class="font-weight-bold">@Model.TotalApprovedDays gün</h3>
+                                            <p class="mb-0">Toplam Onaylı İzin Günü</p>
+                                            <small>Son 1 yılda kullandığınız toplam izin günü</small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fa fa-calendar-check fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-sm-12">
+                            <div class="card bg-secondary text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h3 class="font-weight-bold">@Model.MostUsedLeaveType</h3>
+                                            <p class="mb-0">En Çok Kullanılan İzin Türü</p>
+                                            <small>Son 1 yılda en sık kullandığınız izin türü</small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <i class="fa fa-chart-pie fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
